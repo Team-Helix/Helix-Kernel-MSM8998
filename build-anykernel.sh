@@ -22,38 +22,38 @@ clear
 # Resources
 THREAD="-j$(grep -c ^processor /proc/cpuinfo)"
 KERNEL="Image.gz-dtb"
-DEFCONFIG="oneplus5_defconfig"
+DEFCONFIG="lineage_oneplus5_defconfig"
 
 # Kernel Details
-VER=RenderZenith
-VARIANT="OP5-OOS-0-EAS"
+VER=Helix-Kernel
+VARIANT="001"
+
+CLANG="${HOME}/Documents/toolchains/linux-x86/master/clang-4679922/bin/clang"
+GCC="${HOME}/Documents/toolchains/gcc-linaro-6.4.1-2017.08-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-"
 
 # Vars
 export LOCALVERSION=~`echo $VER`
 export ARCH=arm64
 export SUBARCH=arm64
-export KBUILD_BUILD_USER=RenderZenith
-export KBUILD_BUILD_HOST=RenderServer.net
+export KBUILD_BUILD_USER=ZeroInfinity
+export KBUILD_BUILD_HOST=TeamHelix
 export CCACHE=ccache
+export CC="ccache ${CLANG}"
+export CROSS_COMPILE="ccache ${GCC}"
 
 # Paths
 KERNEL_DIR=`pwd`
 KBUILD_OUTPUT="${KERNEL_DIR}/../out"
-REPACK_DIR="${HOME}/android/source/kernel/AnyKernel2"
-PATCH_DIR="${HOME}/android/source/kernel/AnyKernel2/patch"
-MODULES_DIR="${HOME}/android/source/kernel/AnyKernel2/modules"
-ZIP_MOVE="${HOME}/android/source/zips/OP5-zips"
+REPACK_DIR="${HOME}/Documents/AnyKernel2"
+PATCH_DIR="${HOME}/Documents/AnyKernel2/patch"
+MODULES_DIR="${HOME}/Documents/AnyKernel2/modules"
+ZIP_MOVE="${HOME}/Documents/kernel-builds"
 ZIMAGE_DIR="$KBUILD_OUTPUT/arch/arm64/boot"
 
 # Create output directory
 mkdir -p ${KBUILD_OUTPUT}
 
 # Functions
-function checkout_ak_branches {
-        cd $REPACK_DIR
-        git checkout rk-op5-oos-o
-        cd $KERNEL_DIR
-}
 
 function clean_all {
         cd $REPACK_DIR
@@ -104,45 +104,21 @@ function make_modules {
 function make_zip {
         cp -vr $ZIMAGE_DIR/$KERNEL $REPACK_DIR/zImage
         cd $REPACK_DIR
-        zip -r9 RenderZenith-"$VARIANT"-V.zip *
-        mv RenderZenith-"$VARIANT"-V.zip $ZIP_MOVE
+        zip -r9 Helix-Kernel-"$VARIANT".zip *
+        mv Helix-Kernel-"$VARIANT".zip $ZIP_MOVE
         cd $KERNEL_DIR
 }
 
 DATE_START=$(date +"%s")
 
 echo -e "${green}"
-echo "RenderZenith creation script:"
+echo "HelixKernel creation script (Modified from RenderZenith creation script):"
 echo -e "${restore}"
-
-echo "Pick Toolchain..."
-select choice in gcc-aosp-4.9 gcc-linaro-4.9.4 gcc-linaro-6.4.1 gcc-linaro-7.2.1
-do
-case "$choice" in
-    "gcc-aosp-4.9")
-        export CROSS_COMPILE=${HOME}/android/source/toolchains/gcc-aosp-4.9/bin/aarch64-linux-android-
-        break;;
-    "gcc-linaro-4.9.4")
-        export CROSS_COMPILE=${HOME}/android/source/toolchains/gcc-linaro-4.9.4/bin/aarch64-linux-gnu-
-        break;;
-    "gcc-linaro-6.4.1")
-        export CROSS_COMPILE=${HOME}/android/source/toolchains/gcc-linaro-6.4.1/bin/aarch64-linux-gnu-
-        break;;
-    "gcc-linaro-7.2.1")
-        export CROSS_COMPILE=${HOME}/android/source/toolchains/gcc-linaro-7.2.1/bin/aarch64-linux-gnu-
-        break;;
-
-esac
-done
-
-# Use CCACHE
-export CROSS_COMPILE="${CCACHE} ${CROSS_COMPILE}"
 
 while read -p "Do you want to clean stuffs (y/n)? " cchoice
 do
 case "$cchoice" in
     y|Y )
-        checkout_ak_branches
         clean_all
         echo
         echo "All Cleaned now."
