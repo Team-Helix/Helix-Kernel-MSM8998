@@ -28,7 +28,6 @@ DEFCONFIG="lineage_oneplus5_defconfig"
 VER=Helix-Kernel
 VARIANT="001"
 
-CLANG="${HOME}/Documents/toolchains/linux-x86/master/clang-4679922/bin/clang"
 GCC="${HOME}/Documents/toolchains/gcc-linaro-6.4.1-2017.08-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-"
 
 # Vars
@@ -38,8 +37,7 @@ export SUBARCH=arm64
 export KBUILD_BUILD_USER=ZeroInfinity
 export KBUILD_BUILD_HOST=TeamHelix
 export CCACHE=ccache
-export CC="ccache ${CLANG}"
-export CROSS_COMPILE="ccache ${GCC}"
+export CROSS_COMPILE="${CCACHE} ${GCC}"
 
 # Paths
 KERNEL_DIR=`pwd`
