@@ -28,7 +28,7 @@ DEFCONFIG="lineage_oneplus5_defconfig"
 VER=Helix-Kernel
 VARIANT="001"
 
-GCC="${HOME}/Documents/toolchains/gcc-linaro-6.4.1-2017.08-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-"
+GCC="${HOME}/Documents/kernel-development/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 
 # Vars
 export LOCALVERSION=~`echo $VER`
@@ -42,10 +42,10 @@ export CROSS_COMPILE="${CCACHE} ${GCC}"
 # Paths
 KERNEL_DIR=`pwd`
 KBUILD_OUTPUT="${KERNEL_DIR}/../out"
-REPACK_DIR="${HOME}/Documents/AnyKernel2"
-PATCH_DIR="${HOME}/Documents/AnyKernel2/patch"
-MODULES_DIR="${HOME}/Documents/AnyKernel2/modules"
-ZIP_MOVE="${HOME}/Documents/kernel-builds"
+REPACK_DIR="${HOME}/Documents/kernel-development/oneplus/AnyKernel2"
+PATCH_DIR="${HOME}/Documents/kernel-development/oneplus/AnyKernel2/patch"
+MODULES_DIR="${HOME}/Documents/kernel-development/oneplus/AnyKernel2/modules"
+ZIP_MOVE="${HOME}/Documents/kernel-development/oneplus/kernel-builds"
 ZIMAGE_DIR="$KBUILD_OUTPUT/arch/arm64/boot"
 
 # Create output directory
