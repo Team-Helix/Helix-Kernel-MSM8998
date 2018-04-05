@@ -28,24 +28,28 @@ DEFCONFIG="lineage_oneplus5_defconfig"
 VER=Helix-Kernel
 VARIANT="001"
 
-GCC="${HOME}/Documents/toolchains/gcc-linaro-6.4.1-2017.08-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-"
+CLANG_FOLDER="${HOME}/Documents/kernel-development/toolchains/linux-x86/clang-4639204"
+CLANG=${CLANG_FOLDER}/bin/clang
+LLVM_DIS=${CLANG_FOLDER}/bin/llvm-dis
 
 # Vars
-export LOCALVERSION=~`echo $VER`
+export LD_LIBRARY_PATH="${CLANG}/lib64"
 export ARCH=arm64
-export SUBARCH=arm64
 export KBUILD_BUILD_USER=ZeroInfinity
 export KBUILD_BUILD_HOST=TeamHelix
-export CCACHE=ccache
-export CROSS_COMPILE="${CCACHE} ${GCC}"
+export CLANG_TRIPLE=aarch64-linux-gnu-
+export CROSS_COMPILE="${CC}"
+export HOSTCC="${CLANG}"
+export LLVM_DIS="${LLVM_DIS}"
+export LOCALVERSION=~`echo $VER`
 
 # Paths
 KERNEL_DIR=`pwd`
 KBUILD_OUTPUT="${KERNEL_DIR}/../out"
-REPACK_DIR="${HOME}/Documents/AnyKernel2"
-PATCH_DIR="${HOME}/Documents/AnyKernel2/patch"
-MODULES_DIR="${HOME}/Documents/AnyKernel2/modules"
-ZIP_MOVE="${HOME}/Documents/kernel-builds"
+REPACK_DIR="${HOME}/Documents/kernel-development/oneplus/AnyKernel2"
+PATCH_DIR="${HOME}/Documents/kernel-development/oneplus/AnyKernel2/patch"
+MODULES_DIR="${HOME}/Documents/kernel-development/oneplus/AnyKernel2/modules"
+ZIP_MOVE="${HOME}/Documents/kernel-development/oneplus/kernel-builds"
 ZIMAGE_DIR="$KBUILD_OUTPUT/arch/arm64/boot"
 
 # Create output directory
@@ -66,8 +70,8 @@ function clean_all {
 
 function make_kernel {
         echo
-        make O=${KBUILD_OUTPUT} $DEFCONFIG
-        make O=${KBUILD_OUTPUT} $THREAD
+        make CC="ccache ${CLANG}" O=${KBUILD_OUTPUT} $DEFCONFIG
+        make CC="ccache ${CLANG}" O=${KBUILD_OUTPUT} $THREAD
 }
 
 function make_modules {
